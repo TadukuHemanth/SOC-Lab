@@ -10,7 +10,7 @@ The objective of this lab is to gain hands-on experience with Security Informati
 
 ## Lab Architecture
 
-![SOC Architecture](screenshots/soc-architecture.png)
+![SOC Architecture](soc-architecture.png)
 
 ### Components
 
