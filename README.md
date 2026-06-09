@@ -2,54 +2,31 @@
 
 ## Overview
 
-This project demonstrates the design and implementation of a Home Security Operations Center (SOC) Lab using Wazuh, VirtualBox, Windows 11, and Kali Linux.
+This project demonstrates the creation of a Home Security Operations Center (SOC) Lab using Wazuh, VirtualBox, Windows 11, Kali Linux, and VirusTotal.
 
-The objective of this lab is to gain hands-on experience with Security Information and Event Management (SIEM), log collection, endpoint monitoring, threat detection, and incident investigation in a controlled environment.
+The objective of this lab was to gain hands-on experience with SIEM deployment, endpoint monitoring, threat detection, File Integrity Monitoring (FIM), and basic threat intelligence integration.
 
 ---
 
-## Lab Architecture
+## Architecture
 
 ![SOC Architecture](SOC-Architecture.png)
 
-### Components
+### Lab Components
 
-| Component                 | Purpose                                   |
-| ------------------------- | ----------------------------------------- |
-| Host Machine (Windows 11) | Runs VirtualBox and hosts the lab         |
-| VirtualBox                | Virtualization platform                   |
-| Wazuh OVA                 | SIEM platform for monitoring and analysis |
-| Windows 11 VM             | Monitored endpoint                        |
-| Kali Linux VM             | Attack simulation and testing             |
-
----
-
-## Architecture Workflow
-
-1. Windows 11 VM generates security events.
-2. Wazuh Agent forwards logs to the Wazuh Manager.
-3. Wazuh analyzes and correlates events.
-4. Security alerts are generated within the Wazuh Dashboard.
-5. Kali Linux is used to simulate attack activities.
-6. The SOC Analyst investigates alerts and incidents.
-
----
-
-## Technologies Used
-
-* Wazuh SIEM
-* VirtualBox
-* Windows 11
-* Kali Linux
-* Windows Event Logs
-* Linux System Logs
-* Cybersecurity Monitoring
+| Component      | Purpose                 |
+| -------------- | ----------------------- |
+| Wazuh OVA      | SIEM Platform           |
+| Windows 11 VM  | Monitored Endpoint      |
+| Kali Linux VM  | Attack Simulation       |
+| VirtualBox     | Virtualization Platform |
+| VirusTotal API | Threat Intelligence     |
 
 ---
 
 ## Environment Setup
 
-### Host System
+### Host Machine
 
 * Windows 11
 * 16 GB RAM
@@ -66,187 +43,124 @@ The objective of this lab is to gain hands-on experience with Security Informati
 #### Windows 11 VM
 
 * Registered as Wazuh Agent
-* Generates Windows security events
+* Generates security events
 
 #### Kali Linux VM
 
-* Used for security testing
-* Used for attack simulation
+* Used for attack simulation and testing
 
 ---
 
-## Agent Enrollment
+## Security Monitoring Use Cases
 
-The Windows 11 virtual machine was successfully enrolled as a Wazuh Agent and connected to the Wazuh Manager.
+### Failed Login Detection
 
-### Verification
+Performed multiple failed login attempts on the Windows endpoint.
 
-* Agent status displayed as Active
-* Logs successfully received by Wazuh Dashboard
-
----
-
-# Security Event Simulation
-
-To validate monitoring capabilities, several security-related activities were performed.
+**Result:** Wazuh successfully detected authentication failures and generated alerts.
 
 ---
 
-## Use Case 1: Failed Login Attempts
+### User Account Creation
 
-### Objective
-
-Validate authentication monitoring.
-
-### Activity
-
-Multiple incorrect passwords were entered during Windows login.
-
-### Detection
-
-Wazuh generated authentication failure alerts.
-
-### Result
-
-Successful detection of failed login attempts.
-
----
-
-## Use Case 2: Account Creation
-
-### Objective
-
-Validate account management monitoring.
-
-### Activity
-
-A new local Windows user account was created.
+Created a new local Windows account.
 
 ```cmd
 net user testuser Password123! /add
 ```
 
-### Detection
-
-Wazuh detected account creation activity.
-
-### Result
-
-Successful monitoring of user account creation.
+**Result:** Wazuh detected account creation activity.
 
 ---
 
-## Use Case 3: Account Deletion
+### User Account Deletion
 
-### Objective
-
-Validate account lifecycle monitoring.
-
-### Activity
-
-The test user account was deleted.
+Deleted the previously created user account.
 
 ```cmd
 net user testuser /delete
 ```
 
-### Detection
-
-Wazuh detected account deletion activity.
-
-### Result
-
-Successful monitoring of account deletion events.
+**Result:** Wazuh detected account deletion activity.
 
 ---
 
-# Evidence
+### File Integrity Monitoring (FIM)
+
+Configured Syscheck to monitor:
+
+```text
+C:\SOC-Test
+```
+
+Created and deleted files within the monitored directory.
+
+**Result:** Wazuh generated real-time file monitoring alerts.
+
+---
+
+### VirusTotal Integration
+
+Integrated VirusTotal API with Wazuh to enrich file monitoring capabilities.
+
+Configured:
+
+```xml
+<integration>
+  <name>virustotal</name>
+  <group>syscheck</group>
+</integration>
+```
+
+**Result:** Wazuh successfully monitored file activity and was configured for threat intelligence enrichment.
+
+---
 
 ## Screenshots
 
-Store screenshots inside the `screenshots/` directory.
-
-Examples:
-
+* SOC Architecture
 * Agent Connected
-* Wazuh Dashboard
 * Failed Login Alert
 * User Creation Alert
 * User Deletion Alert
-* Threat Hunting View
+* File Integrity Monitoring Alert
+* Threat Hunting Dashboard
 
 ---
 
-# Findings
+## Key Skills Demonstrated
 
-The Home SOC Lab successfully demonstrated:
-
-* Centralized log collection
-* Endpoint monitoring
-* Authentication monitoring
-* User account auditing
-* Security alert generation
-* Basic incident investigation
-
----
-
-# Challenges Encountered
-
-* VirtualBox network configuration
-* Agent registration troubleshooting
-* Log forwarding verification
-
-All issues were resolved through configuration validation and connectivity testing.
+* SIEM Deployment
+* Wazuh Administration
+* Endpoint Monitoring
+* Threat Detection
+* File Integrity Monitoring (FIM)
+* Threat Intelligence Integration
+* Security Event Analysis
+* Incident Investigation
 
 ---
 
-# Lessons Learned
+## Lessons Learned
 
-This project provided practical experience with:
+Through this project I learned:
 
-* SIEM deployment
-* Wazuh administration
-* Endpoint monitoring
-* Security event analysis
-* Incident investigation workflow
-* Cybersecurity documentation
+* How SIEM platforms collect and analyze logs
+* How Wazuh agents communicate with the manager
+* Authentication monitoring and account auditing
+* File Integrity Monitoring
+* Security event investigation workflows
+* Basic SOC operations
 
 ---
 
-# Future Improvements
+## Future Improvements
 
 * Install Sysmon for advanced telemetry
-* Add Linux endpoint monitoring
-* Create custom Wazuh detection rules
+* Monitor Linux endpoints
+* Create custom Wazuh rules
 * Simulate attacks using Atomic Red Team
 * Perform threat hunting exercises
-* Build incident response playbooks
-
----
-
-# Repository Structure
-
-```text
-Home-SOC-Lab/
-│
-├── README.md
-├── Architecture/
-│   └── SOC-Architecture.png
-│
-├── Incident-Reports/
-│   ├── Failed-Login-Report.md
-│   ├── User-Creation-Report.md
-│   └── User-Deletion-Report.md
-│
-├── Screenshots/
-│   ├── Agent-Connected.png
-│   ├── Failed-Login-Alert.png
-│   ├── User-Creation-Alert.png
-│   └── User-Deletion-Alert.png
-│
-└── Documentation/
-    └── Home-SOC-Lab-Report.docx
-```
 
 ---
 
@@ -254,4 +168,4 @@ Home-SOC-Lab/
 
 **Hemanth Taduku**
 
-Home SOC Lab Project | Wazuh SIEM | Security Monitoring | SOC Analyst Portfolio
+SOC Analyst | Home Lab Enthusiast | Cybersecurity Learner
